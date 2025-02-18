@@ -1,0 +1,28 @@
+"""
+    python 执行带参数
+    python3 ParseText.py screen_service1.png
+"""
+import easyocr
+import cv2
+import os, sys
+import pytesseract
+from PIL import Image
+
+if __name__ == '__main__':
+
+    if len(sys.argv)  < 2:
+        print("<Parse Text>pamaters error, please check")
+        sys.exit(-1)
+
+    args = sys.argv
+    # screenShot = Image.open(args[1])
+    # screenText = pytesseract.image_to_string(screenShot)
+    # print(screenText)
+    screenShot = cv2.imread(args[1])
+
+    reader = easyocr.Reader(['en'])
+
+    screenText = reader.readtext(screenShot, detail=0, paragraph=False)
+
+    for i in screenText:
+        print(i)
