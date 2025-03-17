@@ -1,0 +1,3178 @@
+Description: Automation testcases 4 Android Hourly
+ProjectInfo:
+    Project: Android_U-S928X-T220
+    Platform: tyson_gtv-userdebug
+    Image version:
+#Module->SubModule->TestCase ID
+Module:
+    Unit:
+        Device_Status:
+            - Benchmark_Parameters_Check_Test
+            - Capture_and_Generate_Memory_Information
+            - Boot_Time_Test
+            - Boot_Time_Test_Restore_Default
+            - Power_Dissipation_Test_Home_Scene
+            - Power_Dissipation_Test_ShallowStandby_Scene
+            - Power_Dissipation_Test_Exoplayer_Playback_Scene
+            - Power_Dissipation_Test_Local_Playback_Scene
+        APK_Test:
+            - Antutu_v9_6_2_APK_Test
+            - Antutu_v8_APK_Test
+            - # Antutu_v7_APK_Test-dismissed
+            - Antutu_v6_APK_Test
+            - Geekbench_v5_4_6_APK_Test
+            - Geekbench_v4_4_0_APK_Test
+            - # Geekbench_v4_3_2_APK_Test-dismissed
+            - GFXbench_v5_0_5_APK_Test
+            - GFXbench_v3_0_APK_Test
+            - 3DMark_4580_APK_Test
+            - 3DMark_4661_APK_Test
+            - PassMark_APK_Test
+            - flatland-U_Script_Test
+            - # PCMark_APK_Test-dismissed
+            - # NenaMark_APK_Test-dismissed
+            - # BaseMark_APK_Test-dismissed
+            - # Linpack_APK_Test-dismissed
+            - AIBenchmark_APK_Test
+            - Accuracybenchmark_APK_Test
+        Bin_Test:
+            - Kernel_Performance_Test
+    # Tracer_dart:
+        Login_and_Test:
+            - Login_netflix
+            - Tracer_dart_Test
+---
+Benchmark_Parameters_Check_Test:
+    CaseName: Benchmark_Parameters_Check_Test
+    Description:
+    Available: 1
+    TestTimes: 1
+    CaseTimeOut: 60
+    CmdTimeOut: 60
+    SetupCmd:
+        command1:
+            command_type: console
+            command: done_sleep 2 adb root
+            args:
+            return: void
+        command2:
+            command_type: dut
+            command: mkdir -p /data/Benchmark_Parameters_Check_Test
+            args:
+            return: void
+        command3:
+            command_type: console
+            command: mkdir -p ./log/case_log/Benchmark_Parameters_Check_Test
+            args:
+            return: void
+    TearDownCmd:
+        command1:
+            command_type: dut
+            command: rm -rf /data/Benchmark_Parameters_Check_Test
+            args:
+            return: void
+    Cmd_Args:
+        command1:
+            command_type: console
+            command: adb push ./Case_Script/KPI/Benchmark_Parameters_Check_Test/benchmark_precondition.sh /data/Benchmark_Parameters_Check_Test/benchmark_precondition.sh
+            args:
+            return: void
+        command2:
+            command_type: dut
+            command: chmod 777 /data/Benchmark_Parameters_Check_Test/benchmark_precondition.sh
+            args:
+            return: void
+        command3:
+            command_type: console
+            command: adb shell "sh /data/Benchmark_Parameters_Check_Test/benchmark_precondition.sh -q -t" > ./log/case_log/Benchmark_Parameters_Check_Test/benchmark_precondition.txt
+            args:
+            return: void
+        command4:
+            command_type: console
+            command: adb shell dumpsys SurfaceFlinger > ./log/case_log/Benchmark_Parameters_Check_Test/surfaceflinger.log
+            args:
+            return: void
+        command5:
+            command_type: console
+            command: cat ./log/case_log/Benchmark_Parameters_Check_Test/benchmark_precondition.txt
+            args:
+            return: log
+            expected_result:
+                result1:
+                    condition: existed
+                    keywordlist:
+                        - "SOC NAME"
+                        - "DDR SIZE"
+                        - "MMC SIZE"
+                        - "GPU NAME"
+                        - "Android VER"
+
+Antutu_v9_6_2_APK_Test:
+    CaseName: Antutu_v9_6_2_APK_Test
+    Description:
+    Available: 1
+    TestTimes: 1
+    CaseTimeOut: 1000
+    CmdTimeOut: 1000
+    SetupCmd:
+        command1:
+            command_type: console
+            command: done_sleep 2 adb reboot
+            args:
+            return: void
+        command2:
+            command_type: console
+            command: mkdir -p ./log/case_log/Antutu_v9_6_2_APK_Test
+            args:
+            return: void
+        command3:
+            command_type: console
+            command: done_sleep 2 adb uninstall com.antutu.ABenchMark
+            args:
+            return: void
+        command4:
+            command_type: console
+            command: adb push ./Case_Script/KPI/Benchmark_Parameters_Check_Test/benchmark_precondition.sh /data/Antutu_v9_6_2_APK_Test/benchmark_precondition.sh
+            args:
+            return: void
+        command5:
+            command_type: dut
+            command: chmod 777 /data/Antutu_v9_6_2_APK_Test/benchmark_precondition.sh
+            args:
+            return: void
+        command6:
+            command_type: console
+            command: adb shell "sh /data/Antutu_v9_6_2_APK_Test/benchmark_precondition.sh -p"
+            args:
+            return: log
+    TearDownCmd:
+        command1:
+            command_type: console
+            command: adb pull /data/benchmark_test_photo ./log/case_log/Antutu_v9_6_2_APK_Test
+            args:
+            return: void
+        command2:
+            command_type: dut
+            command: rm -rf /data/benchmark_test_photo
+            args:
+            return: void
+        command3:
+            command_type: dut
+            command: rm -rf /data/Antutu_v9_6_2_APK_Test
+            args:
+            return: void
+    Cmd_Args:
+        command1:
+            command_type: console
+            command: adb shell getprop ro.serialno
+            args:
+            return: log
+            expected_result:
+                result1:
+                    condition: get_value
+                    keywordlist:
+                        - .*
+                        - ADB_SN
+        command2:
+            command_type: console
+            command: bash ./Case_Script/KPI/Antutu_v9_6_2_APK_Test/benchmark_click_install.sh
+            args:
+                - get_value.ADB_SN
+            return: void
+        command3:
+            command_type: console
+            command: done_sleep 5 adb shell "am start -n com.antutu.ABenchMark/com.example.benchmark.preview.activity.PreviewMainActivity"
+            args:
+            return: void
+        command4:
+            command_type: console
+            command: done_sleep 2 bash ./Case_Script/KPI/Antutu_v9_6_2_APK_Test/benmark_allow.sh
+            args:
+                - get_value.ADB_SN
+            return: void
+        command5:
+            command_type: console
+            command: bash Case_Script/KPI/Common_Res/benchmark_compute_test.sh
+            args:
+                - get_value.ADB_SN
+                - "CPU"
+            return: log
+            expected_result:
+                result1:
+                    condition: existed
+                    keywordlist:
+                        - "BenchmarkAPP test finish"
+        command6:
+            command_type: console
+            command: adb pull /data/data/com.antutu.ABenchMark/files log/case_log/Antutu_v9_6_2_APK_Test
+            args:
+            return: void
+        command7:
+            command_type: console
+            command: adb shell uiautomator dump /sdcard/window_dump_CPU.xml
+            args:
+            return: void
+        command8:
+            command_type: console
+            command: adb shell uiautomator dump /sdcard/window_dump_CPU.xml
+            args:
+            return: void
+        command9:
+            command_type: console
+            command: adb pull /sdcard/window_dump_CPU.xml log/case_log/Antutu_v9_6_2_APK_Test
+            args:
+            return: void
+        command10:
+            command_type: console
+            command: done_sleep 5 adb shell "am force-stop com.antutu.ABenchMark"
+            args:
+            return: void
+        command11:
+            command_type: console
+            command: done_sleep 5 adb shell "am start -n com.antutu.ABenchMark/com.example.benchmark.preview.activity.PreviewMainActivity"
+            args:
+            return: void
+        command12:
+            command_type: console
+            command: bash Case_Script/KPI/Common_Res/benchmark_compute_test.sh
+            args:
+                - get_value.ADB_SN
+                - "COMPUTE"
+            return: log
+            expected_result:
+                result1:
+                    condition: existed
+                    keywordlist:
+                        - "BenchmarkAPP test finish"
+        command13:
+            command_type: console
+            command: adb shell uiautomator dump /sdcard/window_dump_compute.xml
+            args:
+            return: void
+        command14:
+            command_type: console
+            command: adb shell uiautomator dump /sdcard/window_dump_compute.xml
+            args:
+            return: void
+        command15:
+            command_type: console
+            command: adb pull /sdcard/window_dump_compute.xml log/case_log/Antutu_v9_6_2_APK_Test
+            args:
+            return: void
+
+Antutu_v8_APK_Test:
+    CaseName: Antutu_v8_APK_Test
+    Description:
+    Available: 1
+    TestTimes: 1
+    CaseTimeOut: 1000
+    CmdTimeOut: 1000
+    SetupCmd:
+        command1:
+            command_type: console
+            command: done_sleep 2 adb reboot
+            args:
+            return: void
+        command2:
+            command_type: console
+            command: mkdir -p ./log/case_log/Antutu_v8_APK_Test
+            args:
+            return: void
+        command3:
+            command_type: console
+            command: done_sleep 2 adb uninstall com.antutu.ABenchMark
+            args:
+            return: void
+        command4:
+            command_type: console
+            command: adb push ./Case_Script/KPI/Benchmark_Parameters_Check_Test/benchmark_precondition.sh /data/Antutu_v8_APK_Test/benchmark_precondition.sh
+            args:
+            return: void
+        command5:
+            command_type: dut
+            command: chmod 777 /data/Antutu_v8_APK_Test/benchmark_precondition.sh
+            args:
+            return: void
+        command6:
+            command_type: console
+            command: adb shell "sh /data/Antutu_v8_APK_Test/benchmark_precondition.sh -p"
+            args:
+            return: log
+    TearDownCmd:
+        command1:
+            command_type: console
+            command: adb pull /data/benchmark_test_photo ./log/case_log/Antutu_v8_APK_Test
+            args:
+            return: void
+        command2:
+            command_type: dut
+            command: rm -rf /data/benchmark_test_photo
+            args:
+            return: void
+        command3:
+            command_type: dut
+            command: rm -rf /data/Antutu_v8_APK_Test
+            args:
+            return: void
+    Cmd_Args:
+        command1:
+            command_type: console
+            command: adb shell getprop ro.serialno
+            args:
+            return: log
+            expected_result:
+                result1:
+                    condition: get_value
+                    keywordlist:
+                        - .*
+                        - ADB_SN
+        command2:
+            command_type: console
+            command: bash ./Case_Script/KPI/Antutu_v8_APK_Test/benchmark_click_install.sh
+            args:
+                - get_value.ADB_SN
+            return: void
+        command3:
+            command_type: console
+            command: done_sleep 5 adb shell "am start -n com.antutu.ABenchMark/com.antutu.benchmark.ui.home.activity.ActivityMain"
+            args:
+            return: void
+        command4:
+            command_type: console
+            command: done_sleep 2 bash ./Case_Script/KPI/Antutu_v8_APK_Test/benmark_allow.sh
+            args:
+                - get_value.ADB_SN
+            return: void
+        command5:
+            command_type: console
+            command: bash Case_Script/KPI/Common_Res/benchmark_compute_test.sh
+            args:
+                - get_value.ADB_SN
+                - "CPU"
+            return: log
+            expected_result:
+                result1:
+                    condition: existed
+                    keywordlist:
+                        - "BenchmarkAPP test finish"
+        command6:
+            command_type: console
+            command: adb pull /data/data/com.antutu.ABenchMark/files log/case_log/Antutu_v8_APK_Test
+            args:
+            return: void
+        command7:
+            command_type: console
+            command: adb shell uiautomator dump /sdcard/window_dump_CPU.xml
+            args:
+            return: void
+        command8:
+            command_type: console
+            command: adb shell uiautomator dump /sdcard/window_dump_CPU.xml
+            args:
+            return: void
+        command9:
+            command_type: console
+            command: adb pull /sdcard/window_dump_CPU.xml log/case_log/Antutu_v8_APK_Test
+            args:
+            return: void
+        command10:
+            command_type: console
+            command: done_sleep 5 adb shell "am force-stop com.antutu.ABenchMark"
+            args:
+            return: void
+        command11:
+            command_type: console
+            command: done_sleep 5 adb shell "am start -n com.antutu.ABenchMark/com.antutu.benchmark.ui.home.activity.ActivityMain"
+            args:
+            return: void
+        command12:
+            command_type: console
+            command: bash Case_Script/KPI/Common_Res/benchmark_compute_test.sh
+            args:
+                - get_value.ADB_SN
+                - "COMPUTE"
+            return: log
+            expected_result:
+                result1:
+                    condition: existed
+                    keywordlist:
+                        - "BenchmarkAPP test finish"
+        command13:
+            command_type: console
+            command: adb shell uiautomator dump /sdcard/window_dump_compute.xml
+            args:
+            return: void
+        command14:
+            command_type: console
+            command: adb shell uiautomator dump /sdcard/window_dump_compute.xml
+            args:
+            return: void
+        command15:
+            command_type: console
+            command: adb pull /sdcard/window_dump_compute.xml log/case_log/Antutu_v8_APK_Test
+            args:
+            return: void
+
+Antutu_v7_APK_Test:
+    CaseName: Antutu_v7_APK_Test
+    Description:
+    Available: 1
+    TestTimes: 1
+    CaseTimeOut: 1000
+    CmdTimeOut: 1000
+    SetupCmd:
+        command1:
+            command_type: console
+            command: done_sleep 2 adb reboot
+            args:
+            return: void
+        command2:
+            command_type: console
+            command: mkdir -p ./log/case_log/Antutu_v7_APK_Test
+            args:
+            return: void
+        command3:
+            command_type: console
+            command: done_sleep 2 adb uninstall com.antutu.ABenchMark
+            args:
+            return: void
+        command4:
+            command_type: console
+            command: adb push ./Case_Script/KPI/Benchmark_Parameters_Check_Test/benchmark_precondition.sh /data/Antutu_v7_APK_Test/benchmark_precondition.sh
+            args:
+            return: void
+        command5:
+            command_type: dut
+            command: chmod 777 /data/Antutu_v7_APK_Test/benchmark_precondition.sh
+            args:
+            return: void
+        command6:
+            command_type: console
+            command: adb shell "sh /data/Antutu_v7_APK_Test/benchmark_precondition.sh -p"
+            args:
+            return: log
+    TearDownCmd:
+        command1:
+            command_type: console
+            command: adb pull /data/benchmark_test_photo ./log/case_log/Antutu_v7_APK_Test
+            args:
+            return: void
+        command2:
+            command_type: dut
+            command: rm -rf /data/benchmark_test_photo
+            args:
+            return: void
+        command3:
+            command_type: dut
+            command: rm -rf /data/Antutu_v7_APK_Test
+            args:
+            return: void
+    Cmd_Args:
+        command1:
+            command_type: console
+            command: adb shell getprop ro.serialno
+            args:
+            return: log
+            expected_result:
+                result1:
+                    condition: get_value
+                    keywordlist:
+                        - .*
+                        - ADB_SN
+        command2:
+            command_type: console
+            command: bash ./Case_Script/KPI/Antutu_v7_APK_Test/benchmark_click_install.sh
+            args:
+                - get_value.ADB_SN
+            return: void
+        command3:
+            command_type: console
+            command: done_sleep 5 adb shell "am start -n com.antutu.ABenchMark/com.antutu.benchmark.ui.home.activity.ActivityMain"
+            args:
+            return: void
+        command4:
+            command_type: console
+            command: done_sleep 2 bash ./Case_Script/KPI/Antutu_v7_APK_Test/benmark_allow.sh
+            args:
+                - get_value.ADB_SN
+            return: void
+        command5:
+            command_type: console
+            command: bash Case_Script/KPI/Common_Res/benchmark_compute_test.sh
+            args:
+                - get_value.ADB_SN
+                - "CPU"
+            return: log
+            expected_result:
+                result1:
+                    condition: existed
+                    keywordlist:
+                        - "BenchmarkAPP test finish"
+        command6:
+            command_type: console
+            command: adb pull /data/data/com.antutu.ABenchMark/files log/case_log/Antutu_v7_APK_Test
+            args:
+            return: void
+        command7:
+            command_type: console
+            command: adb shell uiautomator dump /sdcard/window_dump_CPU.xml
+            args:
+            return: void
+        command8:
+            command_type: console
+            command: adb shell uiautomator dump /sdcard/window_dump_CPU.xml
+            args:
+            return: void
+        command9:
+            command_type: console
+            command: adb pull /sdcard/window_dump_CPU.xml log/case_log/Antutu_v7_APK_Test
+            args:
+            return: void
+        command10:
+            command_type: console
+            command: done_sleep 5 adb shell "am force-stop com.antutu.ABenchMark"
+            args:
+            return: void
+        command11:
+            command_type: console
+            command: done_sleep 5 adb shell "am start -n com.antutu.ABenchMark/com.antutu.benchmark.ui.home.activity.ActivityMain"
+            args:
+            return: void
+        command12:
+            command_type: console
+            command: bash Case_Script/KPI/Common_Res/benchmark_compute_test.sh
+            args:
+                - get_value.ADB_SN
+                - "COMPUTE"
+            return: log
+            expected_result:
+                result1:
+                    condition: existed
+                    keywordlist:
+                        - "BenchmarkAPP test finish"
+        command13:
+            command_type: console
+            command: adb shell uiautomator dump /sdcard/window_dump_compute.xml
+            args:
+            return: void
+        command14:
+            command_type: console
+            command: adb shell uiautomator dump /sdcard/window_dump_compute.xml
+            args:
+            return: void
+        command15:
+            command_type: console
+            command: adb pull /sdcard/window_dump_compute.xml log/case_log/Antutu_v7_APK_Test
+            args:
+            return: void
+
+Antutu_v6_APK_Test:
+    CaseName: Antutu_v6_APK_Test
+    Description:
+    Available: 1
+    TestTimes: 1
+    CaseTimeOut: 1000
+    CmdTimeOut: 1000
+    SetupCmd:
+        command1:
+            command_type: console
+            command: done_sleep 2 adb reboot
+            args:
+            return: void
+        command2:
+            command_type: console
+            command: mkdir -p ./log/case_log/Antutu_v6_APK_Test
+            args:
+            return: void
+        command3:
+            command_type: console
+            command: done_sleep 2 adb uninstall com.antutu.ABenchMark
+            args:
+            return: void
+        command4:
+            command_type: console
+            command: adb push ./Case_Script/KPI/Benchmark_Parameters_Check_Test/benchmark_precondition.sh /data/Antutu_v6_APK_Test/benchmark_precondition.sh
+            args:
+            return: void
+        command5:
+            command_type: dut
+            command: chmod 777 /data/Antutu_v6_APK_Test/benchmark_precondition.sh
+            args:
+            return: void
+        command6:
+            command_type: console
+            command: adb shell "sh /data/Antutu_v6_APK_Test/benchmark_precondition.sh -p"
+            args:
+            return: log
+    TearDownCmd:
+        command1:
+            command_type: console
+            command: adb pull /data/benchmark_test_photo ./log/case_log/Antutu_v6_APK_Test
+            args:
+            return: void
+        command2:
+            command_type: dut
+            command: rm -rf /data/benchmark_test_photo
+            args:
+            return: void
+        command3:
+            command_type: dut
+            command: rm -rf /data/Antutu_v6_APK_Test
+            args:
+            return: void
+    Cmd_Args:
+        command1:
+            command_type: console
+            command: adb shell getprop ro.serialno
+            args:
+            return: log
+            expected_result:
+                result1:
+                    condition: get_value
+                    keywordlist:
+                        - .*
+                        - ADB_SN
+        command2:
+            command_type: console
+            command: bash ./Case_Script/KPI/Antutu_v6_APK_Test/benchmark_click_install.sh
+            args:
+                - get_value.ADB_SN
+            return: void
+        command3:
+            command_type: console
+            command: done_sleep 5 adb shell "am start -n com.antutu.ABenchMark/com.antutu.benchmark.activity.MainActivity"
+            args:
+            return: void
+        command4:
+            command_type: console
+            command: done_sleep 2 bash ./Case_Script/KPI/Antutu_v6_APK_Test/benmark_allow.sh
+            args:
+                - get_value.ADB_SN
+            return: void
+        command5:
+            command_type: console
+            command: bash Case_Script/KPI/Common_Res/benchmark_compute_test.sh
+            args:
+                - get_value.ADB_SN
+                - "CPU"
+            return: log
+            expected_result:
+                result1:
+                    condition: existed
+                    keywordlist:
+                        - "BenchmarkAPP test finish"
+        command6:
+            command_type: console
+            command: adb pull /data/data/com.antutu.ABenchMark/files log/case_log/Antutu_v6_APK_Test
+            args:
+            return: void
+        command7:
+            command_type: console
+            command: adb shell uiautomator dump /sdcard/window_dump_CPU.xml
+            args:
+            return: void
+        command8:
+            command_type: console
+            command: adb shell uiautomator dump /sdcard/window_dump_CPU.xml
+            args:
+            return: void
+        command9:
+            command_type: console
+            command: adb pull /sdcard/window_dump_CPU.xml log/case_log/Antutu_v6_APK_Test
+            args:
+            return: void
+        command10:
+            command_type: console
+            command: done_sleep 5 adb shell "am force-stop com.antutu.ABenchMark"
+            args:
+            return: void
+        command11:
+            command_type: console
+            command: done_sleep 5 adb shell "am start -n com.antutu.ABenchMark/com.antutu.benchmark.activity.MainActivity"
+            args:
+            return: void
+        command12:
+            command_type: console
+            command: bash Case_Script/KPI/Common_Res/benchmark_compute_test.sh
+            args:
+                - get_value.ADB_SN
+                - "COMPUTE"
+            return: log
+            expected_result:
+                result1:
+                    condition: existed
+                    keywordlist:
+                        - "BenchmarkAPP test finish"
+        command13:
+            command_type: console
+            command: adb shell uiautomator dump /sdcard/window_dump_compute.xml
+            args:
+            return: void
+        command14:
+            command_type: console
+            command: adb shell uiautomator dump /sdcard/window_dump_compute.xml
+            args:
+            return: void
+        command15:
+            command_type: console
+            command: adb pull /sdcard/window_dump_compute.xml log/case_log/Antutu_v6_APK_Test
+            args:
+            return: void
+
+Geekbench_v5_4_6_APK_Test:
+    CaseName: Geekbench_v5_4_6_APK_Test
+    Description:
+    Available: 1
+    TestTimes: 1
+    CaseTimeOut: 1000
+    CmdTimeOut: 1000
+    SetupCmd:
+        command1:
+            command_type: console
+            command: done_sleep 70 adb root
+            args:
+            return: void
+        command2:
+            command_type: console
+            command: mkdir -p ./log/case_log/Geekbench_v5_4_6_APK_Test
+            args:
+            return: void
+        command3:
+            command_type: console
+            command: done_sleep 2 adb uninstall com.primatelabs.geekbench5
+            args:
+            return: void
+        command4:
+            command_type: console
+            command: adb push ./Case_Script/KPI/Benchmark_Parameters_Check_Test/benchmark_precondition.sh /data/Geekbench_v5_4_6_APK_Test/benchmark_precondition.sh
+            args:
+            return: void
+        command5:
+            command_type: dut
+            command: chmod 777 /data/Geekbench_v5_4_6_APK_Test/benchmark_precondition.sh
+            args:
+            return: void
+        command6:
+            command_type: console
+            command: adb shell "sh /data/Geekbench_v5_4_6_APK_Test/benchmark_precondition.sh -p"
+            args:
+            return: log
+    TearDownCmd:
+        command1:
+            command_type: console
+            command: adb pull /data/benchmark_test_photo ./log/case_log/Geekbench_v5_4_6_APK_Test
+            args:
+            return: void
+        command2:
+            command_type: dut
+            command: rm -rf /data/benchmark_test_photo
+            args:
+            return: void
+        command3:
+            command_type: dut
+            command: rm -rf /data/Geekbench_v5_4_6_APK_Test
+            args:
+            return: void
+    Cmd_Args:
+        command1:
+            command_type: console
+            command: adb shell getprop ro.serialno
+            args:
+            return: log
+            expected_result:
+                result1:
+                    condition: get_value
+                    keywordlist:
+                        - .*
+                        - ADB_SN
+        command2:
+            command_type: console
+            command: bash ./Case_Script/KPI/Geekbench_v5_4_6_APK_Test/benchmark_click_install.sh
+            args:
+                - get_value.ADB_SN
+            return: void
+        command3:
+            command_type: console
+            command: done_sleep 5 adb shell "am start -n com.primatelabs.geekbench5/com.primatelabs.geekbench.HomeActivity"
+            args:
+            return: void
+        command4:
+            command_type: console
+            command: done_sleep 2 bash ./Case_Script/KPI/Geekbench_v5_4_6_APK_Test/benmark_allow.sh
+            args:
+                - get_value.ADB_SN
+            return: void
+        command5:
+            command_type: console
+            command: bash Case_Script/KPI/Common_Res/benchmark_compute_test.sh
+            args:
+                - get_value.ADB_SN
+                - "CPU"
+            return: log
+            expected_result:
+                result1:
+                    condition: existed
+                    keywordlist:
+                        - "BenchmarkAPP test finish"
+        command6:
+            command_type: console
+            command: adb pull /data/data/com.primatelabs.geekbench5/files log/case_log/Geekbench_v5_4_6_APK_Test
+            args:
+            return: void
+        command7:
+            command_type: console
+            command: adb shell uiautomator dump /sdcard/window_dump_CPU.xml
+            args:
+            return: void
+        command8:
+            command_type: console
+            command: adb shell uiautomator dump /sdcard/window_dump_CPU.xml
+            args:
+            return: void
+        command9:
+            command_type: console
+            command: adb pull /sdcard/window_dump_CPU.xml log/case_log/Geekbench_v5_4_6_APK_Test
+            args:
+            return: void
+        command10:
+            command_type: console
+            command: done_sleep 5 adb shell "am force-stop com.primatelabs.geekbench5"
+            args:
+            return: void
+        command11:
+            command_type: console
+            command: done_sleep 5 adb shell "am start -n com.primatelabs.geekbench5/com.primatelabs.geekbench.HomeActivity"
+            args:
+            return: void
+        command12:
+            command_type: console
+            command: bash Case_Script/KPI/Common_Res/benchmark_compute_test.sh
+            args:
+                - get_value.ADB_SN
+                - "COMPUTE"
+            return: log
+            expected_result:
+                result1:
+                    condition: existed
+                    keywordlist:
+                        - "BenchmarkAPP test finish"
+        command13:
+            command_type: console
+            command: adb shell uiautomator dump /sdcard/window_dump_compute.xml
+            args:
+            return: void
+        command14:
+            command_type: console
+            command: adb shell uiautomator dump /sdcard/window_dump_compute.xml
+            args:
+            return: void
+        command15:
+            command_type: console
+            command: adb pull /sdcard/window_dump_compute.xml log/case_log/Geekbench_v5_4_6_APK_Test
+            args:
+            return: void
+
+Geekbench_v4_4_0_APK_Test: # v4_4_0 share the script with v4_3_2 
+    CaseName: Geekbench_v4_4_0_APK_Test
+    Description:
+    Available: 1
+    TestTimes: 1
+    CaseTimeOut: 1000
+    CmdTimeOut: 1000
+    SetupCmd:
+        command1:
+            command_type: console
+            command: done_sleep 70 adb root
+            args:
+            return: void
+        command2:
+            command_type: console
+            command: mkdir -p ./log/case_log/Geekbench_v4_4_0_APK_Test
+            args:
+            return: void
+        command3:
+            command_type: console
+            command: done_sleep 2 adb uninstall com.primatelabs.geekbench
+            args:
+            return: void
+        command4:
+            command_type: console
+            command: adb push ./Case_Script/KPI/Benchmark_Parameters_Check_Test/benchmark_precondition.sh /data/Geekbench_v4_4_0_APK_Test/benchmark_precondition.sh
+            args:
+            return: void
+        command5:
+            command_type: dut
+            command: chmod 777 /data/Geekbench_v4_4_0_APK_Test/benchmark_precondition.sh
+            args:
+            return: void
+        command6:
+            command_type: console
+            command: adb shell "sh /data/Geekbench_v4_4_0_APK_Test/benchmark_precondition.sh -p"
+            args:
+            return: log
+    TearDownCmd:
+        command1:
+            command_type: console
+            command: adb pull /data/benchmark_test_photo ./log/case_log/Geekbench_v4_4_0_APK_Test
+            args:
+            return: void
+        command2:
+            command_type: dut
+            command: rm -rf /data/benchmark_test_photo
+            args:
+            return: void
+        command3:
+            command_type: dut
+            command: rm -rf /data/Geekbench_v4_4_0_APK_Test
+            args:
+            return: void
+    Cmd_Args:
+        command1:
+            command_type: console
+            command: adb shell getprop ro.serialno
+            args:
+            return: log
+            expected_result:
+                result1:
+                    condition: get_value
+                    keywordlist:
+                        - .*
+                        - ADB_SN
+        command2:
+            command_type: console
+            command: bash ./Case_Script/KPI/Geekbench_v4_4_0_APK_Test/benchmark_click_install.sh
+            args:
+                - get_value.ADB_SN
+            return: void
+        command3:
+            command_type: console
+            command: done_sleep 5 adb shell "am start -n com.primatelabs.geekbench/com.primatelabs.geekbench.HomeActivity"
+            args:
+            return: void
+        command4:
+            command_type: console
+            command: done_sleep 2 bash ./Case_Script/KPI/Geekbench_v4_4_0_APK_Test/benmark_allow.sh
+            args:
+                - get_value.ADB_SN
+            return: void
+        command5:
+            command_type: console
+            command: bash Case_Script/KPI/Common_Res/benchmark_compute_test.sh
+            args:
+                - get_value.ADB_SN
+                - "CPU"
+            return: log
+            expected_result:
+                result1:
+                    condition: existed
+                    keywordlist:
+                        - "BenchmarkAPP test finish"
+        command6:
+            command_type: console
+            command: adb pull /data/data/com.primatelabs.geekbench/files log/case_log/Geekbench_v4_4_0_APK_Test
+            args:
+            return: void
+        command7:
+            command_type: console
+            command: adb shell uiautomator dump /sdcard/window_dump_CPU.xml
+            args:
+            return: void
+        command8:
+            command_type: console
+            command: adb shell uiautomator dump /sdcard/window_dump_CPU.xml
+            args:
+            return: void
+        command9:
+            command_type: console
+            command: adb pull /sdcard/window_dump_CPU.xml log/case_log/Geekbench_v4_4_0_APK_Test
+            args:
+            return: void
+        command10:
+            command_type: console
+            command: done_sleep 5 adb shell "am force-stop com.primatelabs.geekbench"
+            args:
+            return: void
+        command11:
+            command_type: console
+            command: done_sleep 5 adb shell "am start -n com.primatelabs.geekbench/com.primatelabs.geekbench.HomeActivity"
+            args:
+            return: void
+        command12:
+            command_type: console
+            command: bash Case_Script/KPI/Common_Res/benchmark_compute_test.sh
+            args:
+                - get_value.ADB_SN
+                - "COMPUTE"
+            return: log
+            expected_result:
+                result1:
+                    condition: existed
+                    keywordlist:
+                        - "BenchmarkAPP test finish"
+        command13:
+            command_type: console
+            command: adb shell uiautomator dump /sdcard/window_dump_compute.xml
+            args:
+            return: void
+        command14:
+            command_type: console
+            command: adb shell uiautomator dump /sdcard/window_dump_compute.xml
+            args:
+            return: void
+        command15:
+            command_type: console
+            command: adb pull /sdcard/window_dump_compute.xml log/case_log/Geekbench_v4_4_0_APK_Test
+            args:
+            return: void
+
+GFXbench_v5_0_5_APK_Test:
+    CaseName: GFXbench_v5_0_5_APK_Test
+    Description:
+    Available: 1
+    TestTimes: 1
+    CaseTimeOut: 1400
+    CmdTimeOut: 1400
+    SetupCmd:
+        command1:
+            command_type: console
+            command: done_sleep 70 adb reboot
+            args:
+            return: void
+        command2:
+            command_type: console
+            command: done_sleep 2 adb root
+            args:
+            return: void
+        command3:
+            command_type: console
+            command: mkdir -p ./log/case_log/GFXbench_v5_0_5_APK_Test
+            args:
+            return: void
+        command4:
+            command_type: console
+            command: adb shell mkdir -p /data/GFXbench_v5_0_5_APK_Test
+            args:
+            return: void
+        command5:
+            command_type: console
+            command: done_sleep 2 adb uninstall com.glbenchmark.glbenchmark27
+            args:
+            return: void
+        command6:
+            command_type: console
+            command: adb push ./Case_Script/KPI/GFXbench_v5_0_5_APK_Test/gfxbench_benchmark_precondition.sh /data/GFXbench_v5_0_5_APK_Test/gfxbench_benchmark_precondition.sh
+            args:
+            return: void
+        command7:
+            command_type: dut
+            command: chmod 777 /data/GFXbench_v5_0_5_APK_Test/gfxbench_benchmark_precondition.sh
+            args:
+            return: void
+        command8:
+            command_type: console
+            command: adb shell "sh /data/GFXbench_v5_0_5_APK_Test/gfxbench_benchmark_precondition.sh"
+            args:
+            return: void
+    TearDownCmd:
+        command1:
+            command_type: console
+            command: adb pull /data/benchmark_test_photo ./log/case_log/GFXbench_v5_0_5_APK_Test
+            args:
+            return: void
+        command2:
+            command_type: dut
+            command: rm -rf /data/GFXbench_v5_0_5_APK_Test
+            args:
+            return: void
+        command3:
+            command_type: dut
+            command: rm -rf /data/benchmark_test_photo
+            args:
+            return: void
+        command4:
+            command_type: console
+            command: done_sleep 60 adb reboot
+            args:
+            return: void
+    Cmd_Args:
+        command1:
+            command_type: console
+            command: adb shell getprop ro.serialno
+            args:
+            return: log
+            expected_result:
+                result1:
+                    condition: get_value
+                    keywordlist:
+                        - .*
+                        - ADB_SN
+        command2:
+            command_type: console
+            command: bash ./Case_Script/KPI/GFXbench_v5_0_5_APK_Test/gfxbench_click_install.sh
+            args:
+                - get_value.ADB_SN
+            return: void
+        command3:
+            command_type: console
+            command: done_sleep 5 adb shell "input keyevent 3"
+            args:
+            return: void
+        command4:
+            command_type: console
+            command: done_sleep 5 adb shell "am start -n com.glbenchmark.glbenchmark27/net.kishonti.app.MainActivity"
+            args:
+            return: void
+        command5:
+            command_type: console
+            command: bash Case_Script/KPI/Common_Res/benchmark_compute_test.sh
+            args:
+                - get_value.ADB_SN
+                - GFX
+            return: log
+            expected_result:
+                result1:
+                    condition: existed
+                    keywordlist:
+                        - "BenchmarkAPP test finish"
+        command6:
+            command_type: console
+            command: adb pull /sdcard/Android/data/com.glbenchmark.glbenchmark27/files/results ./log/case_log/GFXbench_v5_0_5_APK_Test
+            args:
+            return: void
+
+GFXbench_v3_0_APK_Test:
+    CaseName: GFXbench_v3_0_APK_Test
+    Description:
+    Available: 1
+    TestTimes: 1
+    CaseTimeOut: 1400
+    CmdTimeOut: 1400
+    SetupCmd:
+        command1:
+            command_type: console
+            command: done_sleep 70 adb reboot
+            args:
+            return: void
+        command2:
+            command_type: console
+            command: done_sleep 2 adb root
+            args:
+            return: void
+        command3:
+            command_type: console
+            command: mkdir -p ./log/case_log/GFXbench_v3_0_APK_Test
+            args:
+            return: void
+        command4:
+            command_type: console
+            command: adb shell mkdir -p /data/GFXbench_v3_0_APK_Test
+            args:
+            return: void
+        command5:
+            command_type: console
+            command: done_sleep 2 adb uninstall net.kishonti.gfxbench
+            args:
+            return: void
+        command6:
+            command_type: console
+            command: adb push ./Case_Script/KPI/GFXbench_v3_0_APK_Test/gfxbench_benchmark_precondition.sh /data/GFXbench_v3_0_APK_Test/gfxbench_benchmark_precondition.sh
+            args:
+            return: void
+        command7:
+            command_type: dut
+            command: chmod 777 /data/GFXbench_v3_0_APK_Test/gfxbench_benchmark_precondition.sh
+            args:
+            return: void
+        command8:
+            command_type: console
+            command: adb shell "sh /data/GFXbench_v3_0_APK_Test/gfxbench_benchmark_precondition.sh"
+            args:
+            return: void
+    TearDownCmd:
+        command1:
+            command_type: console
+            command: adb pull /data/benchmark_test_photo ./log/case_log/GFXbench_v3_0_APK_Test
+            args:
+            return: void
+        command2:
+            command_type: dut
+            command: rm -rf /data/GFXbench_v3_0_APK_Test
+            args:
+            return: void
+        command3:
+            command_type: dut
+            command: rm -rf /data/benchmark_test_photo
+            args:
+            return: void
+        command4:
+            command_type: console
+            command: done_sleep 60 adb reboot
+            args:
+            return: void
+    Cmd_Args:
+        command1:
+            command_type: console
+            command: adb shell getprop ro.serialno
+            args:
+            return: log
+            expected_result:
+                result1:
+                    condition: get_value
+                    keywordlist:
+                        - .*
+                        - ADB_SN
+        command2:
+            command_type: console
+            command: bash ./Case_Script/KPI/GFXbench_v3_0_APK_Test/gfxbench_click_install.sh
+            args:
+                - get_value.ADB_SN
+            return: void
+        command3:
+            command_type: console
+            command: done_sleep 5 adb shell "input keyevent 3"
+            args:
+            return: void
+        command4:
+            command_type: console
+            command: done_sleep 5 adb shell "am start -n net.kishonti.gfxbench/net.kishonti.gfxbench.MainActivity"
+            args:
+            return: void
+        command5:
+            command_type: console
+            command: bash Case_Script/KPI/Common_Res/benchmark_compute_test.sh
+            args:
+                - get_value.ADB_SN
+                - GFX
+            return: log
+            expected_result:
+                result1:
+                    condition: existed
+                    keywordlist:
+                        - "BenchmarkAPP test finish"
+        command6:
+            command_type: console
+            command: adb pull /sdcard/Android/data/net.kishonti.gfxbench/files/results ./log/case_log/GFXbench_v3_0_APK_Test
+            args:
+            return: void
+3DMark_4580_APK_Test:
+    CaseName: 3DMark_4580_APK_Test
+    Description:
+    Available: 1
+    TestTimes: 1
+    CaseTimeOut: 1400
+    CmdTimeOut: 1400
+    SetupCmd:
+        command1:
+            command_type: console
+            command: done_sleep 70 adb reboot
+            args:
+            return: void
+        command2:
+            command_type: console
+            command: done_sleep 2 adb root
+            args:
+            return: void
+        command3:
+            command_type: console
+            command: mkdir -p ./log/case_log/3DMark_4580_APK_Test
+            args:
+            return: void
+        command4:
+            command_type: console
+            command: adb shell mkdir -p /data/3DMark_4580_APK_Test
+            args:
+            return: void
+        command5:
+            command_type: console
+            command: done_sleep 2 adb uninstall com.futuremark.dmandroid.application
+            args:
+            return: void
+        command6:
+            command_type: console
+            command: adb push ./Case_Script/KPI/3DMark_4580_APK_Test/gfxbench_benchmark_precondition.sh /data/3DMark_4580_APK_Test/gfxbench_benchmark_precondition.sh
+            args:
+            return: void
+        command7:
+            command_type: dut
+            command: chmod 777 /data/3DMark_4580_APK_Test/gfxbench_benchmark_precondition.sh????
+            args:
+            return: void
+        command8:
+            command_type: console
+            command: adb shell "sh /data/3DMark_4580_APK_Test/gfxbench_benchmark_precondition.sh"????
+            args:
+            return: void
+    TearDownCmd:
+        command1:
+            command_type: console
+            command: adb pull /data/benchmark_test_photo ./log/case_log/3DMark_4580_APK_Test
+            args:
+            return: void
+        command2:
+            command_type: dut
+            command: rm -rf /data/3DMark_4580_APK_Test
+            args:
+            return: void
+        command3:
+            command_type: dut
+            command: rm -rf /data/benchmark_test_photo
+            args:
+            return: void
+        command4:
+            command_type: console
+            command: done_sleep 60 adb reboot
+            args:
+            return: void
+    Cmd_Args:
+        command1:
+            command_type: console
+            command: adb shell getprop ro.serialno
+            args:
+            return: log
+            expected_result:
+                result1:
+                    condition: get_value
+                    keywordlist:
+                        - .*
+                        - ADB_SN
+        command2:
+            command_type: console
+            command: bash ./Case_Script/KPI/3DMark_4580_APK_Test/gfxbench_click_install.sh????
+            args:
+                - get_value.ADB_SN
+            return: void
+        command3:
+            command_type: console
+            command: done_sleep 5 adb shell "input keyevent 3"
+            args:
+            return: void
+        command4:
+            command_type: console
+            command: done_sleep 5 adb shell "am start -n com.futuremark.dmandroid.application/com.futuremark.dmandroid.application.MainActivity"
+            args:
+            return: void
+        command5:
+            command_type: console
+            command: bash Case_Script/KPI/Common_Res/benchmark_compute_test.sh
+            args:
+                - get_value.ADB_SN
+                - GFX
+            return: log
+            expected_result:
+                result1:
+                    condition: existed
+                    keywordlist:
+                        - "BenchmarkAPP test finish"
+        command6:
+            command_type: console
+            command: adb pull /sdcard/Android/data/com.futuremark.dmandroid.application/files/results ./log/case_log/3DMark_4580_APK_Test
+            args:
+            return: void
+
+3DMark_4661_APK_Test:
+    CaseName: 3DMark_4661_APK_Test
+    Description:
+    Available: 1
+    TestTimes: 1
+    CaseTimeOut: 1400
+    CmdTimeOut: 1400
+    SetupCmd:
+        command1:
+            command_type: console
+            command: done_sleep 70 adb reboot
+            args:
+            return: void
+        command2:
+            command_type: console
+            command: done_sleep 2 adb root
+            args:
+            return: void
+        command3:
+            command_type: console
+            command: mkdir -p ./log/case_log/3DMark_4661_APK_Test
+            args:
+            return: void
+        command4:
+            command_type: console
+            command: adb shell mkdir -p /data/3DMark_4661_APK_Test
+            args:
+            return: void
+        command5:
+            command_type: console
+            command: done_sleep 2 adb uninstall com.futuremark.dmandroid.application
+            args:
+            return: void
+        command6:
+            command_type: console
+            command: adb push ./Case_Script/KPI/3DMark_4661_APK_Test/gfxbench_benchmark_precondition.sh /data/3DMark_4661_APK_Test/gfxbench_benchmark_precondition.sh
+            args:
+            return: void
+        command7:
+            command_type: dut
+            command: chmod 777 /data/3DMark_4661_APK_Test/gfxbench_benchmark_precondition.sh????
+            args:
+            return: void
+        command8:
+            command_type: console
+            command: adb shell "sh /data/3DMark_4661_APK_Test/gfxbench_benchmark_precondition.sh"????
+            args:
+            return: void
+    TearDownCmd:
+        command1:
+            command_type: console
+            command: adb pull /data/benchmark_test_photo ./log/case_log/3DMark_4661_APK_Test
+            args:
+            return: void
+        command2:
+            command_type: dut
+            command: rm -rf /data/3DMark_4661_APK_Test
+            args:
+            return: void
+        command3:
+            command_type: dut
+            command: rm -rf /data/benchmark_test_photo
+            args:
+            return: void
+        command4:
+            command_type: console
+            command: done_sleep 60 adb reboot
+            args:
+            return: void
+    Cmd_Args:
+        command1:
+            command_type: console
+            command: adb shell getprop ro.serialno
+            args:
+            return: log
+            expected_result:
+                result1:
+                    condition: get_value
+                    keywordlist:
+                        - .*
+                        - ADB_SN
+        command2:
+            command_type: console
+            command: bash ./Case_Script/KPI/3DMark_4661_APK_Test/gfxbench_click_install.sh????
+            args:
+                - get_value.ADB_SN
+            return: void
+        command3:
+            command_type: console
+            command: done_sleep 5 adb shell "input keyevent 3"
+            args:
+            return: void
+        command4:
+            command_type: console
+            command: done_sleep 5 adb shell "am start -n com.futuremark.dmandroid.application/com.futuremark.dmandroid.application.MainActivity"
+            args:
+            return: void
+        command5:
+            command_type: console
+            command: bash Case_Script/KPI/Common_Res/benchmark_compute_test.sh
+            args:
+                - get_value.ADB_SN
+                - GFX
+            return: log
+            expected_result:
+                result1:
+                    condition: existed
+                    keywordlist:
+                        - "BenchmarkAPP test finish"
+        command6:
+            command_type: console
+            command: adb pull /sdcard/Android/data/com.futuremark.dmandroid.application/files/results ./log/case_log/3DMark_4661_APK_Test
+            args:
+            return: void
+
+PassMark_APK_Test:
+    CaseName: PassMark_APK_Test
+    Description:
+    Available: 1
+    TestTimes: 1
+    CaseTimeOut: 1400
+    CmdTimeOut: 1400
+    SetupCmd:
+        command1:
+            command_type: console
+            command: done_sleep 70 adb reboot
+            args:
+            return: void
+        command2:
+            command_type: console
+            command: done_sleep 2 adb root
+            args:
+            return: void
+        command3:
+            command_type: console
+            command: mkdir -p ./log/case_log/PassMark_APK_Test
+            args:
+            return: void
+        command4:
+            command_type: console
+            command: adb shell mkdir -p /data/PassMark_APK_Test
+            args:
+            return: void
+        command5:
+            command_type: console
+            command: done_sleep 2 adb uninstall com.passmark.pt_mobile
+            args:
+            return: void
+        command6:
+            command_type: console
+            command: adb push ./Case_Script/KPI/PassMark_APK_Test/gfxbench_benchmark_precondition.sh /data/PassMark_APK_Test/gfxbench_benchmark_precondition.sh
+            args:
+            return: void
+        command7:
+            command_type: dut
+            command: chmod 777 /data/PassMark_APK_Test/gfxbench_benchmark_precondition.sh????
+            args:
+            return: void
+        command8:
+            command_type: console
+            command: adb shell "sh /data/PassMark_APK_Test/gfxbench_benchmark_precondition.sh"????
+            args:
+            return: void
+    TearDownCmd:
+        command1:
+            command_type: console
+            command: adb pull /data/benchmark_test_photo ./log/case_log/PassMark_APK_Test
+            args:
+            return: void
+        command2:
+            command_type: dut
+            command: rm -rf /data/PassMark_APK_Test
+            args:
+            return: void
+        command3:
+            command_type: dut
+            command: rm -rf /data/benchmark_test_photo
+            args:
+            return: void
+        command4:
+            command_type: console
+            command: done_sleep 60 adb reboot
+            args:
+            return: void
+    Cmd_Args:
+        command1:
+            command_type: console
+            command: adb shell getprop ro.serialno
+            args:
+            return: log
+            expected_result:
+                result1:
+                    condition: get_value
+                    keywordlist:
+                        - .*
+                        - ADB_SN
+        command2:
+            command_type: console
+            command: bash ./Case_Script/KPI/PassMark_APK_Test/gfxbench_click_install.sh????
+            args:
+                - get_value.ADB_SN
+            return: void
+        command3:
+            command_type: console
+            command: done_sleep 5 adb shell "input keyevent 3"
+            args:
+            return: void
+        command4:
+            command_type: console
+            command: done_sleep 5 adb shell "am start -n com.passmark.pt_mobile/com.passmark.pt_mobile.PerformanceTestMobile"
+            args:
+            return: void
+        command5:
+            command_type: console
+            command: bash Case_Script/KPI/Common_Res/benchmark_compute_test.sh
+            args:
+                - get_value.ADB_SN
+                - GFX
+            return: log
+            expected_result:
+                result1:
+                    condition: existed
+                    keywordlist:
+                        - "BenchmarkAPP test finish"
+        command6:
+            command_type: console
+            command: adb pull /sdcard/Android/data/com.passmark.pt_mobile/files/results ./log/case_log/PassMark_APK_Test
+            args:
+            return: void
+
+AIBenchmark_APK_Test:
+    CaseName: AIBenchmark_APK_Test
+    Description:
+    Available: 1
+    TestTimes: 1
+    CaseTimeOut: 1000
+    CmdTimeOut: 1000
+    SetupCmd:
+        command1:
+            command_type: console
+            command: done_sleep 2 adb reboot
+            args:
+            return: void
+        command2:
+            command_type: console
+            command: mkdir -p ./log/case_log/AIBenchmark_APK_Test
+            args:
+            return: void
+        command3:
+            command_type: console
+            command: done_sleep 2 adb uninstall org.benchmark.demo
+            args:
+            return: void
+        command4:
+            command_type: console
+            command: adb push ./Case_Script/KPI/Benchmark_Parameters_Check_Test/benchmark_precondition.sh /data/AIBenchmark_APK_Test/benchmark_precondition.sh
+            args:
+            return: void
+        command5:
+            command_type: dut
+            command: chmod 777 /data/AIBenchmark_APK_Test/benchmark_precondition.sh
+            args:
+            return: void
+        command6:
+            command_type: console
+            command: adb shell "sh /data/AIBenchmark_APK_Test/benchmark_precondition.sh -p"
+            args:
+            return: log
+    TearDownCmd:
+        command1:
+            command_type: console
+            command: adb pull /data/benchmark_test_photo ./log/case_log/AIBenchmark_APK_Test
+            args:
+            return: void
+        command2:
+            command_type: dut
+            command: rm -rf /data/benchmark_test_photo
+            args:
+            return: void
+        command3:
+            command_type: dut
+            command: rm -rf /data/AIBenchmark_APK_Test
+            args:
+            return: void
+    Cmd_Args:
+        command1:
+            command_type: console
+            command: adb shell getprop ro.serialno
+            args:
+            return: log
+            expected_result:
+                result1:
+                    condition: get_value
+                    keywordlist:
+                        - .*
+                        - ADB_SN
+        command2:
+            command_type: console
+            command: bash ./Case_Script/KPI/AIBenchmark_APK_Test/benchmark_click_install.sh
+            args:
+                - get_value.ADB_SN
+            return: void
+        command3:
+            command_type: console
+            command: done_sleep 5 adb shell "am start -n org.benchmark.demo/org.benchmark.demo.MainActivity"
+            args:
+            return: void
+        command4:
+            command_type: console
+            command: done_sleep 2 bash ./Case_Script/KPI/AIBenchmark_APK_Test/benmark_allow.sh
+            args:
+                - get_value.ADB_SN
+            return: void
+        command5:
+            command_type: console
+            command: bash Case_Script/KPI/Common_Res/benchmark_compute_test.sh
+            args:
+                - get_value.ADB_SN
+                - "CPU"
+            return: log
+            expected_result:
+                result1:
+                    condition: existed
+                    keywordlist:
+                        - "BenchmarkAPP test finish"
+        command6:
+            command_type: console
+            command: adb pull /data/data/org.benchmark.demo/files log/case_log/AIBenchmark_APK_Test
+            args:
+            return: void
+        command7:
+            command_type: console
+            command: adb shell uiautomator dump /sdcard/window_dump_CPU.xml
+            args:
+            return: void
+        command8:
+            command_type: console
+            command: adb shell uiautomator dump /sdcard/window_dump_CPU.xml
+            args:
+            return: void
+        command9:
+            command_type: console
+            command: adb pull /sdcard/window_dump_CPU.xml log/case_log/AIBenchmark_APK_Test
+            args:
+            return: void
+        command10:
+            command_type: console
+            command: done_sleep 5 adb shell "am force-stop org.benchmark.demo"
+            args:
+            return: void
+        command11:
+            command_type: console
+            command: done_sleep 5 adb shell "am start -n org.benchmark.demo/org.benchmark.demo.MainActivity"
+            args:
+            return: void
+        command12:
+            command_type: console
+            command: bash Case_Script/KPI/Common_Res/benchmark_compute_test.sh
+            args:
+                - get_value.ADB_SN
+                - "COMPUTE"
+            return: log
+            expected_result:
+                result1:
+                    condition: existed
+                    keywordlist:
+                        - "BenchmarkAPP test finish"
+        command13:
+            command_type: console
+            command: adb shell uiautomator dump /sdcard/window_dump_compute.xml
+            args:
+            return: void
+        command14:
+            command_type: console
+            command: adb shell uiautomator dump /sdcard/window_dump_compute.xml
+            args:
+            return: void
+        command15:
+            command_type: console
+            command: adb pull /sdcard/window_dump_compute.xml log/case_log/AIBenchmark_APK_Test
+            args:
+            return: void
+
+AccuracyBenchmark_APK_Test:
+    CaseName: AccuracyBenchmark_APK_Test
+    Description:
+    Available: 1
+    TestTimes: 1
+    CaseTimeOut: 1000
+    CmdTimeOut: 1000
+    SetupCmd:
+        command1:
+            command_type: console
+            command: done_sleep 2 adb reboot
+            args:
+            return: void
+        command2:
+            command_type: console
+            command: mkdir -p ./log/case_log/AccuracyBenchmark_APK_Test
+            args:
+            return: void
+        command3:
+            command_type: console
+            command: done_sleep 2 adb uninstall com.xintongyuan.aibench
+            args:
+            return: void
+        command4:
+            command_type: console
+            command: adb push ./Case_Script/KPI/Benchmark_Parameters_Check_Test/benchmark_precondition.sh /data/AccuracyBenchmark_APK_Test/benchmark_precondition.sh
+            args:
+            return: void
+        command5:
+            command_type: dut
+            command: chmod 777 /data/AccuracyBenchmark_APK_Test/benchmark_precondition.sh
+            args:
+            return: void
+        command6:
+            command_type: console
+            command: adb shell "sh /data/AccuracyBenchmark_APK_Test/benchmark_precondition.sh -p"
+            args:
+            return: log
+    TearDownCmd:
+        command1:
+            command_type: console
+            command: adb pull /data/benchmark_test_photo ./log/case_log/AccuracyBenchmark_APK_Test
+            args:
+            return: void
+        command2:
+            command_type: dut
+            command: rm -rf /data/benchmark_test_photo
+            args:
+            return: void
+        command3:
+            command_type: dut
+            command: rm -rf /data/AccuracyBenchmark_APK_Test
+            args:
+            return: void
+    Cmd_Args:
+        command1:
+            command_type: console
+            command: adb shell getprop ro.serialno
+            args:
+            return: log
+            expected_result:
+                result1:
+                    condition: get_value
+                    keywordlist:
+                        - .*
+                        - ADB_SN
+        command2:
+            command_type: console
+            command: bash ./Case_Script/KPI/AccuracyBenchmark_APK_Test/benchmark_click_install.sh
+            args:
+                - get_value.ADB_SN
+            return: void
+        command3:
+            command_type: console
+            command: done_sleep 5 adb shell "am start -n com.xintongyuan.aibench/com.xintongyuan.aibench.MainActivity"
+            args:
+            return: void
+        command4:
+            command_type: console
+            command: done_sleep 2 bash ./Case_Script/KPI/AccuracyBenchmark_APK_Test/benmark_allow.sh
+            args:
+                - get_value.ADB_SN
+            return: void
+        command5:
+            command_type: console
+            command: bash Case_Script/KPI/Common_Res/benchmark_compute_test.sh
+            args:
+                - get_value.ADB_SN
+                - "CPU"
+            return: log
+            expected_result:
+                result1:
+                    condition: existed
+                    keywordlist:
+                        - "BenchmarkAPP test finish"
+        command6:
+            command_type: console
+            command: adb pull /data/data/com.xintongyuan.aibench/files log/case_log/AccuracyBenchmark_APK_Test
+            args:
+            return: void
+        command7:
+            command_type: console
+            command: adb shell uiautomator dump /sdcard/window_dump_CPU.xml
+            args:
+            return: void
+        command8:
+            command_type: console
+            command: adb shell uiautomator dump /sdcard/window_dump_CPU.xml
+            args:
+            return: void
+        command9:
+            command_type: console
+            command: adb pull /sdcard/window_dump_CPU.xml log/case_log/AccuracyBenchmark_APK_Test
+            args:
+            return: void
+        command10:
+            command_type: console
+            command: done_sleep 5 adb shell "am force-stop com.xintongyuan.aibench"
+            args:
+            return: void
+        command11:
+            command_type: console
+            command: done_sleep 5 adb shell "am start -n com.xintongyuan.aibench/com.xintongyuan.aibench.MainActivity"
+            args:
+            return: void
+        command12:
+            command_type: console
+            command: bash Case_Script/KPI/Common_Res/benchmark_compute_test.sh
+            args:
+                - get_value.ADB_SN
+                - "COMPUTE"
+            return: log
+            expected_result:
+                result1:
+                    condition: existed
+                    keywordlist:
+                        - "BenchmarkAPP test finish"
+        command13:
+            command_type: console
+            command: adb shell uiautomator dump /sdcard/window_dump_compute.xml
+            args:
+            return: void
+        command14:
+            command_type: console
+            command: adb shell uiautomator dump /sdcard/window_dump_compute.xml
+            args:
+            return: void
+        command15:
+            command_type: console
+            command: adb pull /sdcard/window_dump_compute.xml log/case_log/AccuracyBenchmark_APK_Test
+            args:
+            return: void
+
+flatland-U_Script_Test:
+    CaseName: flatland-U_Script_Test
+    Description:
+    Available: 1
+    TestTimes: 1
+    CaseTimeOut: 1000
+    CmdTimeOut: 1000
+    SetupCmd:
+        command1:
+            command_type: console
+            command: done_sleep 70 adb reboot
+            args:
+            return: void
+        command2:
+            command_type: console
+            command: mkdir -p ./log/case_log/flatland-U_Script_Test
+            args:
+            return: void
+        command3:
+            command_type: console
+            command: adb push ./Case_Script/KPI/Benchmark_Parameters_Check_Test/benchmark_precondition.sh /data/flatland-U_Script_Test/benchmark_precondition.sh
+            args:
+            return: void 
+        command4:
+            command_type: console
+            command: adb shell chmod 777 /data/flatland-U_Script_Test/benchmark_precondition.sh
+            args:
+            return: void
+        command5:
+            command_type: console
+            command: adb shell "sh /data/flatland-U_Script_Test/benchmark_precondition.sh -p"
+            args:
+            return: log       
+        command6:
+            command_type: console
+            command: adb pull /path/flatland-U /data/flatland-U_Script_Test/
+            args:
+            return: void
+        command7:
+            command_type: console
+            command: adb shell chmod 777 /data/flatland-U_Script_Test/flatland-U
+            args:
+            return: void
+        command8:
+            command_type: console
+            command: adb shell stop zygote;setprop persist.vendor.media.bootvideo 0000;setprop service.bootanim.exit 1
+            args:
+            return: void
+    TearDownCmd:
+        command1:
+            command_type: console
+            command: adb shell rm -rf /data/flatland-U_Script_Test
+            args:
+            return: void
+    Cmd_Args:
+        command1:
+            command_type: console
+            command: adb shell getprop ro.serialno
+            args:
+            return: log
+            expected_result:
+                result1:
+                    condition: get_value
+                    keywordlist:
+                        - .*
+                        - ADB_SN
+        command2:
+            command_type: dut
+            command: ./data/flatland/flatland-U
+            args:
+            return: log
+            expected_result:
+                result1:
+                    condition: existed
+                    keywordlist:
+                        - "Home Transition"       
+
+Kernel_Performance_Test:
+    CaseName: Kernel_Performance_Test
+    Description:
+    Available: 1
+    TestTimes: 1
+    CaseTimeOut: 3000
+    CmdTimeOut: 3000
+    SetupCmd:
+        command1:
+            command_type: console
+            command: done_sleep 2 adb root
+            args:
+            return: void
+        command2:
+            command_type: console
+            command: mkdir -p ./log/case_log/Kernel_Performance_Test
+            args:
+            return: void
+        command3:
+            command_type: console
+            command: adb shell mkdir -p /data/BenchmarkBin
+            args:
+            return: void
+    TearDownCmd:
+        command1:
+            command_type: console
+            command: adb shell rm -rf /data/BenchmarkBin
+            args:
+            return: void
+    Cmd_Args:
+        command1:
+            command_type: console
+            command: adb push Case_Script/KPI/Kernel_Performance_Test/bin /data/BenchmarkBin/Benchmark
+            args:
+            return: void
+        command2:
+            command_type: console
+            command: done_sleep 2 adb shell stop
+            args:
+            return: void
+        command3:
+            command_type: console
+            command: adb shell "sh /data/BenchmarkBin/Benchmark/basic_benchmark_daily.sh" > ./log/case_log/Kernel_Performance_Test/basic_benchmark_binary.txt
+            args:
+            return: void
+        command4:
+            command_type: console
+            command: done_sleep 70 adb shell start
+            args:
+            return: void
+        command5:
+            command_type: console
+            command: cat ./log/case_log/Kernel_Performance_Test/basic_benchmark_binary.txt
+            args:
+            return: log
+            expected_result:
+                result1:
+                    condition: existed
+                    keywordlist:
+                        - "Run basic benchmark OK."
+        command6:
+            command_type: console
+            command: adb shell "ps -A | grep system_server"
+            args:
+            return: log
+            expected_result:
+                result1:
+                    condition: existed
+                    keywordlist:
+                        - "system_server"
+        command7:
+            command_type: console
+            command: adb shell cmd wifi status
+            args:
+            return: log
+            expected_result:
+                result1:
+                    condition: existed_not
+                    keywordlist:
+                        - "Can't find"
+
+Capture_and_Generate_Memory_Information:
+    CaseName: Capture_and_Generate_Memory_Information
+    Description:
+    Available: 1
+    TestTimes: 1
+    CaseTimeOut: 900
+    CmdTimeOut: 900
+    SetupCmd:
+        command1:
+            command_type: console
+            command: adb root
+            args:
+            return: void
+        command2:
+            command_type: console
+            command: mkdir -p log/case_log/Capture_and_Generate_Memory_Information/log
+            args:
+            return: void
+        command3:
+            command_type: console
+            command: mkdir -p log/case_log/Capture_and_Generate_Memory_Information/result
+            args:
+            return: void
+    TearDownCmd:
+
+    Cmd_Args:
+        command1:
+            command_type: console
+            command: adb shell getprop ro.serialno
+            args:
+            return: log
+            expected_result:
+                result1:
+                    condition: get_value
+                    keywordlist:
+                        - .*
+                        - ADB_SN
+        command2:
+            command_type: console
+            command: adb shell logcat -c
+            args:
+            return: void
+        command3:
+            command_type: console
+            command: adb shell dmesg -C
+            args:
+            return: void
+        command4:
+            command_type: console
+            command: done_sleep 2 adb shell setprop persist.sys.safemode 1
+            args:
+            return: void
+        command5:
+            command_type: console
+            command: done_sleep 60 adb reboot
+            args:
+            return: void
+        command6:
+            command_type: console
+            command: done_sleep 2 adb root
+            args:
+            return: void
+        command7:
+            command_type: console
+            command: done_sleep 2 adb shell getprop ro.sys.safemode
+            args:
+            return: log
+            expected_result:
+                result1:
+                    condition: existed
+                    keywordlist:
+                        - 1
+        command8:
+            command_type: console
+            command: adb shell "/system/bin/screencap -p /data/screen.png"
+            args:
+            return: void
+        command9:
+            command_type: console
+            command: adb pull /data/screen.png ./log/case_log/Capture_and_Generate_Memory_Information/log/safeMode_page.png
+            args:
+            return: void
+        command10:
+            command_type: console
+            command: done_sleep 2 bash ./Case_Script/KPI/Capture_and_Generate_Memory_Information/memory_information_clear_cache.sh
+            args:
+                - get_value.ADB_SN
+            return: void
+        command11:
+            command_type: console
+            command: done_sleep 2 adb shell settings put global development_settings_enabled 1
+            args:
+            return: void
+        command12:
+            command_type: console
+            command: done_sleep 2 adb shell "am start -n com.android.tv.settings/.system.development.DevelopmentActivity"
+            args:
+            return: void
+        command13:
+            command_type: console
+            command: done_sleep 2 bash ./Case_Script/KPI/Capture_and_Generate_Memory_Information/memory_information_click_setting.sh
+            args:
+                - get_value.ADB_SN
+            return: void
+        command14:
+            command_type: console
+            command: sleep 300
+            args:
+            return: void
+        command15:
+            command_type: console
+            command: adb shell "dumpsys meminfo -S" > ./log/case_log/Capture_and_Generate_Memory_Information/log/test_result.txt
+            args:
+            return: void
+        command16:
+            command_type: console
+            command: adb shell logcat -d > ./log/case_log/Capture_and_Generate_Memory_Information/log/logcat.txt
+            args:
+            return: void
+        command17:
+            command_type: console
+            command: adb shell dmesg > ./log/case_log/Capture_and_Generate_Memory_Information/log/dmesg.txt
+            args:
+            return: void
+        command18:
+            command_type: console
+            command: done_sleep 120 adb reboot
+            args:
+            return: void
+Boot_Time_Test:
+    CaseName: Boot_Time_Test
+    Description:
+    Available: 1
+    TestTimes: 1
+    CaseTimeOut: 1200
+    CmdTimeOut: 1200
+    SetupCmd:
+        command1:
+            command_type: console
+            command: mkdir -p ./log/case_log/Boot_Time_Test
+            args:
+            return: void
+        command2:
+            command_type: console
+            command: adb root
+            args:
+            return: void
+    TearDownCmd:
+        command1:
+            command_type: console
+            command: adb root
+            args:
+            return: void
+        command2:
+            command_type: console
+            command: adb pull /data/update_app_test ./log/case_log/Boot_Time_Test/
+            args:
+            return: void
+    Cmd_Args:
+        command1:
+            command_type: console
+            command: adb shell getprop ro.serialno
+            args:
+            return: log
+            expected_result:
+                result1:
+                    condition: get_value
+                    keywordlist:
+                        - .*
+                        - ADB_SN
+        command2:
+            command_type: console
+            command: adb shell pm list package | grep -i package:com.google.android.gms
+            args:
+            return: log
+            expected_result:
+                result1:
+                    condition: get_value
+                    keywordlist:
+                        - .*
+                        - LAUNCHER
+        command3:
+            command_type: console
+            command: if_eq_run
+            args:
+                - get_value.LAUNCHER
+                - package:com.google.android.gms
+                - python3 Case_Script/Common_Util/update_app.py
+                - get_value.ADB_SN
+            return: log
+            expected_result:
+                result1:
+                    condition: existed
+                    keywordlist:
+                        - "Update Apps Success"
+        command4:
+            command_type: dut
+            command: reboot
+            args:
+            return: void
+        command5:
+            command_type: console
+            command: loop_begin
+            args:
+                - 50
+            return: void
+        command6:
+            command_type: dut
+            command: \n
+            args:
+            return: void
+        command7:
+            command_type: console
+            command: sleep 0.2
+            args:
+            return: void
+        command8:
+            command_type: console
+            command: loop_end
+            args:
+            return: void
+        command9:
+            command_type: dut
+            command: setenv loglevel 0
+            args:
+            return: void
+        command10:
+            command_type: dut
+            command: setenv otg_device 1
+            args:
+            return: void
+        command11:
+            command_type: dut
+            command: setenv initargs ${initargs} log_buf_len=4M printk.devkmsg=on loglevel=0 initcall_debug=1
+            args:
+            return: void
+        command12:
+            command_type: dut
+            command: saveenv
+            args:
+            return: void
+        command13:
+            command_type: dut
+            command: reset
+            args:
+            return: void
+        command14:
+            command_type: console
+            command: wc -l < log/dut.txt
+            args:
+            return: log
+            expected_result:
+                result1:
+                    condition: get_value
+                    keywordlist:
+                        - .*
+                        - START_RESET_LINE
+        command15:
+            command_type: console
+            command: bash Case_Script/KPI/Boot_Time_Test/detecting_adb_connections.sh
+            args:
+                - get_value.ADB_SN
+            return: log
+            expected_result:
+                result1:
+                    condition: existed
+                    keywordlist:
+                        - "has_connect_adb"
+        command16:
+            command_type: console
+            command: adb root
+            args:
+            return: void
+        command17:
+            command_type: console
+            command: adb shell getprop ro.build.version.release
+            args:
+            return: log
+            expected_result:
+                result1:
+                    condition: get_value
+                    keywordlist:
+                        - .*
+                        - ADB_ANDROID_VERSION
+        command18:
+            command_type: console
+            command: adb shell getprop ro.board.platform
+            args:
+            return: log
+            expected_result:
+                result1:
+                    condition: get_value
+                    keywordlist:
+                        - .*
+                        - ADB_PLATFORM_NAME
+        command19:
+            command_type: console
+            command: bash Case_Script/KPI/Boot_Time_Test/capture_log.sh
+            args:
+                - get_value.ADB_SN
+                - logcat
+            return: void
+        command20:
+            command_type: console
+            command: bash Case_Script/KPI/Boot_Time_Test/capture_log.sh
+            args:
+                - get_value.ADB_SN
+                - dmesg
+            return: void
+        command21:
+            command_type: console
+            command: wc -l < log/dut.txt
+            args:
+            return: log
+            expected_result:
+                result1:
+                    condition: get_value
+                    keywordlist:
+                        - .*
+                        - START_END_LINE
+        command22:
+            command_type: console
+            command: bash Case_Script/KPI/Boot_Time_Test/copy_log.sh log/dut.txt ./log/case_log/Boot_Time_Test/serial_boot.log
+            args:
+                - get_value.START_RESET_LINE
+                - get_value.START_END_LINE
+            return: void
+        command23:
+            command_type: console
+            command: python3 Case_Script/KPI/Boot_Time_Test/analyze_log.py
+            args:
+                - get_value.ADB_ANDROID_VERSION
+                - get_value.ADB_PLATFORM_NAME
+            return: void
+
+Boot_Time_Test_Restore_Default:
+    CaseName: Boot_Time_Test_Restore_Default
+    Description:
+    Available: 1
+    TestTimes: 1
+    CaseTimeOut: 1200
+    CmdTimeOut: 1200
+    SetupCmd:
+
+    TearDownCmd:
+
+    Cmd_Args:
+        command1:
+            command_type: dut
+            command: reboot
+            args:
+            return: void
+        command2:
+            command_type: console
+            command: loop_begin
+            args:
+                - 50
+            return: void
+        command3:
+            command_type: dut
+            command: \n
+            args:
+            return: void
+        command4:
+            command_type: console
+            command: sleep 0.2
+            args:
+            return: void
+        command5:
+            command_type: console
+            command: loop_end
+            args:
+            return: void
+        command6:
+            command_type: dut
+            command: env default initargs
+            args:
+            return: void
+        command7:
+            command_type: dut
+            command: saveenv
+            args:
+            return: void
+        command8:
+            command_type: dut
+            command: reset
+            args:
+            return: void
+        command9:
+            command_type: console
+            command: sleep 60
+            args:
+            return: void
+
+# Login_netflix:
+    CaseName: login netflix.com
+    Available: 1
+    TestTimes: 1
+    CaseTimeOut: 600
+    SetupCmd:
+        command1:
+            command_type: console
+            command: adb root
+            args:
+            return: void
+    TearDownCmd:
+    Cmd_Args:
+        command1:
+            command_type: console
+            command: adb shell getprop ro.serialno
+            args:
+            return: log
+            expected_result:
+                result1:
+                    condition: get_value
+                    keywordlist:
+                        - .*
+                        - ADB_NUMBER
+        command2:
+            command_type: console
+            command: adb root
+            args:
+            return: void
+        command3:
+            command_type: console
+            command: done_sleep 60 adb shell am start com.netflix.ninja/com.netflix.ninja.MainActivity
+            args:
+            return: void
+        command4:
+            command_type: console
+            command: bash ./Case_Script/KPI/Tracer_Dart/login_netflix.sh
+            args:
+                - get_value.ADB_NUMBER
+            return: void
+        command5:
+            command_type: console
+            command: adb shell dumpsys activity activities | grep netflix
+            args:
+            return: log
+            expected_result:
+                result1:
+                    condition: existed
+                    keywordlist:
+                        - mFocusedWindow=Window{.* u0 com.netflix.ninja/com.netflix.ninja.MainActivity}
+# Tracer_dart_Test:
+    CaseName: Tracer_dart_Test
+    Available: 1
+    TestTimes: 1
+    CaseTimeOut: -1
+    CmdTimeOut: -1
+    SetupCmd:
+        command1:
+            command_type: console
+            command: adb root
+            args:
+            return: void
+        command2:
+            command_type: console
+            command: mkdir -p ./log/case_log/tracer_dart/ ./log/case_log/tracer_dart/test_subatomic_netflix ./log/case_log/tracer_dart/test_subatomic_youtube  ./log/case_log/tracer_dart/disk_profile
+            args:
+            return: void
+    TearDownCmd:
+        command1:
+            command_type: console
+            command: rm -rf ./test_subatomic_*
+            args:
+            return: void
+        command2:
+            command_type: console
+            command: rm -rf ./standard_bk.xlsx
+            args:
+            return: void
+    Cmd_Args:
+        command1:
+            command_type: console
+            command: adb shell getprop ro.serialno
+            args:
+            return: log
+            expected_result:
+                result1:
+                    condition: get_value
+                    keywordlist:
+                        - .*
+                        - ADB_NUMBER
+        command2:
+            command_type: console
+            command: adb root
+            args:
+            return: void
+        command3:
+            command_type: console
+            command: bash ./Case_Script/KPI/Tracer_Dart/run_subatomic.sh
+            args:
+                - get_value.ADB_NUMBER
+            return: void
+
+Power_Dissipation_Test_Home_Scene:
+    CaseName: Power_Dissipation_Test_Home_Scene
+    Description:
+    Available: 1
+    TestTimes: 1
+    CaseTimeOut: 300
+    CmdTimeOut: 300
+    SetupCmd:
+        command1:
+            command_type: console
+            command: done_sleep 70 adb reboot
+            args:
+            return: void
+        command2:
+            command_type: console
+            command: done_sleep 2 adb root
+            args:
+            return: void
+        command3:
+            command_type: console
+            command: mkdir -p ./log/case_log/Power_Dissipation_Test
+            args:
+            return: void
+        command4:
+            command_type: console
+            command: adb shell mkdir -p /data/Power_Dissipation_Test
+            args:
+            return: void
+        command5:
+            command_type: console
+            command: adb push ./Case_Script/KPI/Power_Dissipation_Test/power_precondition.sh /data/Power_Dissipation_Test/power_precondition.sh
+            args:
+            return: void
+        command6:
+            command_type: dut
+            command: chmod 777 /data/Power_Dissipation_Test/power_precondition.sh
+            args:
+            return: void
+
+    TearDownCmd:
+
+    Cmd_Args:
+        command1:
+            command_type: console
+            command: adb shell rm /data/boardinfo.txt
+            args:
+            return: void
+        command2:
+            command_type: console
+            command: adb shell /data/Power_Dissipation_Test/power_precondition.sh -o
+            args:
+            return: void
+        command3:
+            command_type: console
+            command: adb pull /data/boardinfo.txt ./log/case_log/Power_Dissipation_Test/boardinfo_home.txt
+            args:
+            return: void
+        command4:
+            command_type: console
+            command: cat ./log/case_log/Power_Dissipation_Test/boardinfo_home.txt
+            args:
+            return: log
+            expected_result:
+                result1:
+                    condition: existed
+                    keywordlist:
+                        - "MEM WATER"
+                        - "MMC SIZE"
+                        - "GPU NAME"
+                        - "Android VER"
+Power_Dissipation_Test_ShallowStandby_Scene:
+    CaseName: Power_Dissipation_Test_ShallowStandby_Scene
+    Description:
+    Available: 1
+    TestTimes: 1
+    CaseTimeOut: 300
+    CmdTimeOut: 300
+    SetupCmd:
+        command1:
+            command_type: console
+            command: adb root
+            args:
+            return: void
+        command2:
+            command_type: console
+            command: adb shell "echo 0x02 > /sys/class/remote/amremote/protocol"
+            args:
+            return: void
+        command3:
+            command_type: console
+            command: done_sleep 5 adb shell input keyevent 3
+            args:
+            return: void
+        command4:
+            command_type: console
+            command: mkdir -p ./log/case_log/Power_Dissipation_Test
+            args:
+            return: void
+        command5:
+            command_type: console
+            command: adb shell mkdir -p /data/Power_Dissipation_Test
+            args:
+            return: void
+        command6:
+            command_type: console
+            command: adb push ./Case_Script/KPI/Power_Dissipation_Test/power_precondition.sh /data/Power_Dissipation_Test/power_precondition.sh
+            args:
+            return: void
+        command7:
+            command_type: dut
+            command: chmod 777 /data/Power_Dissipation_Test/power_precondition.sh
+            args:
+            return: void
+    TearDownCmd:
+
+    Cmd_Args:
+        command1:
+            command_type: console
+            command: adb shell dumpsys window | grep interactiveState
+            args:
+            return: log
+            expected_result:
+                result1:
+                    condition: existed
+                    keywordlist:
+                        - interactiveState=INTERACTIVE_STATE_AWAKE
+        command2:
+            command_type: console
+            command: adb shell rm /data/boardinfo.txt
+            args:
+            return: void
+        command3:
+            command_type: console
+            command: done_sleep 5 adb shell input keyevent 26
+            args:
+            return: void
+        command4:
+            command_type: console
+            command: adb shell dumpsys window | grep interactiveState
+            args:
+            return: log
+            expected_result:
+                result1:
+                    condition: existed
+                    keywordlist:
+                        - interactiveState=INTERACTIVE_STATE_SLEEP
+        command5:
+            command_type: console
+            command: adb shell /data/Power_Dissipation_Test/power_precondition.sh -o
+            args:
+            return: void
+        command6:
+            command_type: console
+            command: adb pull /data/boardinfo.txt ./log/case_log/Power_Dissipation_Test/boardinfo_ShallowStandby.txt
+            args:
+            return: void
+        command7:
+            command_type: console
+            command: cat ./log/case_log/Power_Dissipation_Test/boardinfo_ShallowStandby.txt
+            args:
+            return: log
+            expected_result:
+                result1:
+                    condition: existed
+                    keywordlist:
+                        - "MEM WATER"
+                        - "MMC SIZE"
+                        - "GPU NAME"
+                        - "Android VER"
+        command8:
+            command_type: console
+            command: done_sleep 5 adb shell input keyevent 26
+            args:
+            return: void
+        command9:
+            command_type: console
+            command: adb shell dumpsys window | grep interactiveState
+            args:
+            return: log
+            expected_result:
+                result1:
+                    condition: existed
+                    keywordlist:
+                        - interactiveState=INTERACTIVE_STATE_AWAKE
+
+Power_Dissipation_Test_Exoplayer_Playback_Scene:
+    CaseName: Power_Dissipation_Test_Exoplayer_Playback_Scene
+    Description:
+    Available: 1
+    TestTimes: 1
+    CaseTimeOut: 300
+    CmdTimeOut: 300
+    SetupCmd:
+        command1:
+            command_type: console
+            command: adb root
+            args:
+            return: void
+        command2:
+            command_type: console
+            command: adb shell "echo 0x02 > /sys/class/remote/amremote/protocol"
+            args:
+            return: void
+        command3:
+            command_type: console
+            command: done_sleep 5 adb shell input keyevent 3
+            args:
+            return: void
+        command4:
+            command_type: console
+            command: mkdir -p ./log/case_log/Power_Dissipation_Test
+            args:
+            return: void
+        command5:
+            command_type: console
+            command: adb shell mkdir -p /data/Power_Dissipation_Test
+            args:
+            return: void
+        command6:
+            command_type: console
+            command: adb push ./Case_Script/KPI/Power_Dissipation_Test/power_precondition.sh /data/Power_Dissipation_Test/power_precondition.sh
+            args:
+            return: void
+        command7:
+            command_type: dut
+            command: chmod 777 /data/Power_Dissipation_Test/power_precondition.sh
+            args:
+            return: void
+        command8:
+            command_type: console
+            command: adb shell am force-stop com.droidlogic.exoplayer2.demo
+            args:
+            return: void
+        command9:
+            command_type: console
+            command: adb shell pm clear com.droidlogic.exoplayer2.demo
+            args:
+            return: void
+        command10:
+            command_type: console
+            command: done_sleep 5 adb shell "echo 2 > /sys/class/codec_mm/tvp_enable"
+            args:
+            return: void
+        command11:
+            command_type: console
+            command: adb shell logcat -c
+            args:
+            return: void
+        command12:
+            command_type: console
+            command: adb shell dmesg -C
+            args:
+            return: void
+        command13:
+            command_type: console
+            command: rm -rf vdec_check.txt
+            args:
+            return: void
+        command14:
+            command_type: console
+            command: done_sleep 5 adb shell "killall android.hardware.media.c2@1.2-service"
+            args:
+            return: void
+        command15:
+            command_type: console
+            command: adb shell am force-stop com.google.android.apps.tv.dreamx
+            args:
+            return: void
+
+    TearDownCmd:
+        command1:
+            command_type: console
+            command: adb shell "echo 0 > /sys/class/codec_mm/tvp_enable"
+            args:
+            return: void
+        command2:
+            command_type: console
+            command: adb shell am force-stop com.droidlogic.exoplayer2.demo
+            args:
+            return: void
+        command3:
+            command_type: console
+            command: adb shell pm clear com.droidlogic.exoplayer2.demo
+            args:
+            return: void
+    Cmd_Args:
+        command1:
+            command_type: console
+            command: mkdir -p
+            args:
+                - ./log/case_log/Power_Dissipation_Test/Exoplayer_Scene_Log
+            return: void
+        command2:
+            command_type: console
+            command: adb shell logcat -v time >
+            args:
+                - ./log/case_log/Power_Dissipation_Test/Exoplayer_Scene_Log &
+            return: void
+        command3:
+            command_type: console
+            command: adb shell dmesg -w >
+            args:
+                - ./log/case_log/Power_Dissipation_Test/Exoplayer_Scene_Log &
+            return: void
+        command4:
+            command_type: console
+            command: adb shell getprop ro.serialno
+            args:
+            return: log
+            expected_result:
+                result1:
+                    condition: get_value
+                    keywordlist:
+                        - .*
+                        - adb_serial
+        command5:
+            command_type: console
+            command: adb install -g res/AMPlayer_MediaTest/ExoPlayer.apk
+            args:
+            return: void
+        command6:
+            command_type: console
+            command: adb install -g res/AMPlayer_MediaTest/ExoPlayer-aosp.apk
+            args:
+            return: void
+        command7:
+            command_type: console
+            command: sleep 5
+            args:
+            return: void
+        command8:
+            command_type: console
+            command: done_sleep 3 adb push
+            args:
+                - res/AMPlayer_MediaTest/exo_clear_h264_Power_Dissipation_Test.json
+                - /sdcard/
+            return: void
+        command9:
+            command_type: console
+            command: done_sleep 2 adb shell sync
+            args:
+            return: void
+        command10:
+            command_type: console
+            command: adb shell ping -c 10 www.google.com
+            args:
+            return: void
+        command11:
+            command_type: console
+            command: done_sleep 5 adb shell
+            args:
+                - am start -n com.droidlogic.exoplayer2.demo/com.droidlogic.mediatest.MediaAutoTestActivity -d
+                - file:///sdcard/exo_clear_h264_Power_Dissipation_Test.json
+            return: void
+        command12:
+            command_type: console
+            command: adb shell getprop ro.serialno
+            args:
+            return: log
+            expected_result:
+                result1:
+                    condition: get_value
+                    keywordlist:
+                        - .*
+                        - ADB_SN
+        command13:
+            command_type: console
+            command: bash ./Case_Script/AMPlayer_MediaTest/MediaTest_allow.sh
+            args:
+                - get_value.ADB_SN
+            return: void
+        command14:
+            command_type: console
+            command: sleep 10
+            args:
+            return: void
+        command15:
+            command_type: console
+            command: adb shell cat /sys/class/vdec/vdec_status > vdec_check.txt
+            args:
+            return: void
+        command16:
+            command_type: console
+            command: adb shell screencap
+            args:
+                - /data/MediaTest_H264_Clear.png
+            return: void
+        command17:
+            command_type: console
+            command: adb pull
+            args:
+                - /data/MediaTest_H264_Clear.png
+                - ./case_log/Power_Dissipation_Test/Exoplayer_Scene_Log/MediaTest_H264_Clear.png
+            return: void
+        command18:
+            command_type: console
+            command: adb shell /data/Power_Dissipation_Test/power_precondition.sh -o
+            args:
+            return: void
+        command19:
+            command_type: console
+            command: adb pull /data/boardinfo.txt ./log/case_log/Power_Dissipation_Test/boardinfo_Exoplayer_Play.txt
+            args:
+            return: void
+        command20:
+            command_type: console
+            command: ps -aux |
+            args:
+                - grep 'adb -s get_value.adb_serial shell logcat' | grep -v grep | awk '{print $2}' | xargs kill
+            return: void
+        command21:
+            command_type: console
+            command: ps -aux |
+            args:
+                - grep 'adb -s get_value.adb_serial shell dmesg' | grep -v grep | awk '{print $2}' | xargs kill
+            return: void
+        command22:
+            command_type: console
+            command: cat vdec_check.txt
+            args:
+            return: log
+            expected_result:
+                result1:
+                    condition: existed_not
+                    keywordlist:
+                        - No vdec
+        command23:
+            command_type: console
+            command: cat ./log/case_log/Power_Dissipation_Test/boardinfo_Exoplayer_Play.txt
+            args:
+            return: log
+            expected_result:
+                result1:
+                    condition: existed
+                    keywordlist:
+                        - "MEM WATER"
+                        - "MMC SIZE"
+                        - "GPU NAME"
+                        - "Android VER"
+
+Power_Dissipation_Test_Local_Playback_Scene:
+    CaseName: Power_Dissipation_Test_Local_Playback_Scene
+    Description:
+    Available: 1
+    TestTimes: 1
+    CaseTimeOut: 300
+    CmdTimeOut: 300
+    SetupCmd:
+        command1:
+            command_type: console
+            command: adb root
+            args:
+            return: void
+        command2:
+            command_type: console
+            command: adb shell "echo 0x02 > /sys/class/remote/amremote/protocol"
+            args:
+            return: void
+        command3:
+            command_type: console
+            command: done_sleep 5 adb shell input keyevent 3
+            args:
+            return: void
+        command4:
+            command_type: console
+            command: mkdir -p ./log/case_log/Power_Dissipation_Test
+            args:
+            return: void
+        command5:
+            command_type: console
+            command: adb shell mkdir -p /data/Power_Dissipation_Test
+            args:
+            return: void
+        command6:
+            command_type: console
+            command: adb push ./Case_Script/KPI/Power_Dissipation_Test/power_precondition.sh /data/Power_Dissipation_Test/power_precondition.sh
+            args:
+            return: void
+        command7:
+            command_type: dut
+            command: chmod 777 /data/Power_Dissipation_Test/power_precondition.sh
+            args:
+            return: void
+        command8:
+            command_type: console
+            command: adb remount
+            args:
+            return: void
+        command9:
+            command_type: console
+            command: adb shell logcat -c
+            args:
+            return: void
+        command10:
+            command_type: console
+            command: adb shell dmesg -C
+            args:
+            return: void
+
+    TearDownCmd:
+        command1:
+            command_type: console
+            command: adb shell pm clear com.droidlogic.exoplayer2.demo
+            args:
+            return: void
+    Cmd_Args:
+        command1:
+            command_type: console
+            command: mkdir -p
+            args:
+                - ./log/case_log/Power_Dissipation_Test/Local_Playback_Scene_Log
+            return: void
+        command2:
+            command_type: console
+            command: adb shell logcat -v time >
+            args:
+                - ./log/case_log/Power_Dissipation_Test/Local_Playback_Scene_Log/Local_Play_H264_logcat.txt &
+            return: void
+        command3:
+            command_type: console
+            command: adb shell dmesg -w >
+            args:
+                - ./log/case_log/Power_Dissipation_Test/Local_Playback_Scene_Log/Local_Play_H264_dmesg.txt &
+            return: void
+        command4:
+            command_type: console
+            command: adb shell blkid | grep -E "LABEL=\"usb\"|LABEL=\"disk\"|LABEL=\"存储盘\"" | cut -d'"' -f4
+            args:
+            return: log
+            expected_result:
+                result1:
+                    condition: get_value
+                    keywordlist:
+                        - (.*)
+                        - usb_storage_name
+        command5:
+            command_type: console
+            command: done_sleep 2 adb shell am start -a android.intent.action.VIEW -n com.droidlogic.exoplayer2.demo/com.droidlogic.videoplayer.MoviePlayer
+            args:
+                - -d /storage/get_value.usb_storage_name/Media_Compatibility_test/H264.mp4
+            return: void
+        command6:
+            command_type: console
+            command: done_sleep 5 adb
+            args:
+                - shell input keyevent 66
+            return: void
+        command7:
+            command_type: console
+            command: adb
+            args:
+                - shell input keyevent 66
+            return: void
+        command8:
+            command_type: console
+            command: adb shell /data/Power_Dissipation_Test/power_precondition.sh -o
+            args:
+            return: void
+        command9:
+            command_type: console
+            command: adb pull /data/boardinfo.txt ./log/case_log/Power_Dissipation_Test/boardinfo_Local_Play.txt
+            args:
+            return: void
+        command10:
+            command_type: console
+            command: adb shell am force-stop com.droidlogic.exoplayer2.demo
+            args:
+            return: void
+        command11:
+            command_type: console
+            command: adb shell getprop ro.serialno
+            args:
+            return: log
+            expected_result:
+                result1:
+                    condition: get_value
+                    keywordlist:
+                        - .*
+                        - adb_serial
+        command12:
+            command_type: console
+            command: ps -aux |
+            args:
+                - grep 'adb -s get_value.adb_serial shell logcat' | grep -v grep | awk '{print $2}' | xargs kill
+            return: void
+        command13:
+            command_type: console
+            command: ps -aux |
+            args:
+                - grep 'adb -s get_value.adb_serial shell dmesg' | grep -v grep | awk '{print $2}' | xargs kill
+            return: void
+        command14:
+            command_type: console
+            command: adb shell logcat -d
+            args:
+            return: log
+            expected_result:
+                result1:
+                    condition: existed_not
+                    keywordlist:
+                        - ".*Failed to initialize decoder.*"
+                        - ".*set error_mark"
+                        - ".*playerFailed.*"
+                        - ".*Unsupport Video format"
+        command15:
+            command_type: console
+            command: cat ./log/case_log/Power_Dissipation_Test/boardinfo_Local_Play.txt
+            args:
+            return: log
+            expected_result:
+                result1:
+                    condition: existed
+                    keywordlist:
+                        - "MEM WATER"
+                        - "MMC SIZE"
+                        - "GPU NAME"
+                        - "Android VER"
